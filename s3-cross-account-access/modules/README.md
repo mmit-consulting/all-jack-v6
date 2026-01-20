@@ -82,3 +82,5 @@ On the hoopla non prod account, here is the minimal policies that the role shoul
   ]
 }
 ```
+
+and don't forget the trust policy
