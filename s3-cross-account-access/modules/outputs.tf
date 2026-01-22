@@ -1,6 +1,6 @@
-output "principal_role_arn" {
-  description = "The role ARN (in the other account) that was granted access."
-  value       = "arn:aws:iam::${var.principal_account_id}:role/${var.principal_role_name}"
+output "principal_role_arns" {
+  description = "List of role ARNs granted access."
+  value       = local.principal_role_arns
 }
 
 output "bucket_arn" {

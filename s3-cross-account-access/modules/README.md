@@ -52,8 +52,10 @@ module "beanstalk_config_access" {
 
   bucket_name          = "com.hoopladigital.beanstalk.config" # hoopla prod bucket
 
-  principal_account_id = var.nonprod_account_id
-  principal_role_name  = "nonprod_reader_role" # non prod account role
+  principals = [
+    { account_id = "174530848851", role_name = "nonprod_s3_reader_role" },
+    { account_id = "111122223333", role_name = "some_other_role" }
+  ]
 
   access      = "read"
   prefixes    = []       # or ["libs/"] if you can scope it

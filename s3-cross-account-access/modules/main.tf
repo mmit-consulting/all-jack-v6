@@ -1,11 +1,18 @@
 locals {
-  # Role in the OTHER account that we want to grant access to
-  principal_role_arn = "arn:aws:iam::${var.principal_account_id}:role/${var.principal_role_name}"
-
   bucket_arn = "arn:aws:s3:::${var.bucket_name}"
 
   # Object ARNs: whole bucket or specific prefixes
   object_arns = length(var.prefixes) == 0 ? ["arn:aws:s3:::${var.bucket_name}/*"] : [for p in var.prefixes : "arn:aws:s3:::${var.bucket_name}/${p}*"]
+  # Role in the OTHER account that we want to grant access to
+  # principal_role_arn = "arn:aws:iam::${var.principal_account_id}:role/${var.principal_role_name}"
+
+  principal_role_arns = [
+    for p in var.principals :
+    "arn:aws:iam::${p.account_id}:role/${p.role_name}"
+  ]
+
+
+
 
   # Access mode -> actions
   read_object_actions = ["s3:GetObject", "s3:GetObjectVersion"]
@@ -26,7 +33,7 @@ data "aws_iam_policy_document" "cross_account_policy" {
 
       principals {
         type        = "AWS"
-        identifiers = [local.principal_role_arn]
+        identifiers = local.principal_role_arns
       }
 
       actions   = local.list_bucket_actions
@@ -50,7 +57,7 @@ data "aws_iam_policy_document" "cross_account_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = [local.principal_role_arn]
+      identifiers = local.principal_role_arns
     }
 
     actions   = local.read_object_actions
@@ -66,7 +73,7 @@ data "aws_iam_policy_document" "cross_account_policy" {
 
       principals {
         type        = "AWS"
-        identifiers = [local.principal_role_arn]
+        identifiers = local.principal_role_arns
       }
 
       actions   = local.write_object_actions

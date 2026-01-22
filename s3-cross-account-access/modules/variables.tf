@@ -3,14 +3,23 @@ variable "bucket_name" {
   description = "Name of the S3 bucket in the current (bucket-owner) account."
 }
 
-variable "principal_account_id" {
-  type        = string
-  description = "AWS account ID where the principal IAM role lives (e.g., nonprod account)."
-}
+# variable "principal_account_id" {
+#   type        = string
+#   description = "AWS account ID where the principal IAM role lives (e.g., nonprod account)."
+# }
 
-variable "principal_role_name" {
-  type        = string
-  description = "Name of the IAM role in the other account that should access this bucket."
+# variable "principal_role_name" {
+#   type        = string
+#   description = "Name of the IAM role in the other account that should access this bucket."
+# }
+
+variable "principals" {
+  description = "List of IAM roles (possibly across multiple accounts) that should access this bucket."
+  type = list(object({
+    account_id = string
+    role_name  = string
+    # If you ever need paths later, switch to role_arn directly.
+  }))
 }
 
 variable "access" {
