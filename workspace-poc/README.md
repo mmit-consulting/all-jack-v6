@@ -94,7 +94,7 @@ After destroy, delete the workspace to avoid confusion later:
 
 ```bash
 terraform workspace select default
-terraform workspace delete WORKSPACE_NAME
+terraform workspace delete -force WORKSPACE_NAME
 ```
 
 NOTE:
